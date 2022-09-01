@@ -7,6 +7,9 @@ const path = require('path');
 const args = process.argv || [];
 const test = args.some(arg => arg.includes('jasmine'));
 
+if (!process.env.DATABASE_URI) {
+  console.log('DATABASE_URI not specified, falling back to localhost.');
+}
 const config = {
   databaseURI: process.env.DATABASE_URI,
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
