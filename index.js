@@ -10,12 +10,14 @@ const test = args.some(arg => arg.includes('jasmine'));
 if (!process.env.DATABASE_URI) {
   console.log('DATABASE_URI not specified, falling back to localhost.');
 }
+const port = process.env.PORT || 1337;
+
 const config = {
   databaseURI: process.env.DATABASE_URI,
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
   appId: process.env.APP_ID || 'myAppId',
   masterKey: process.env.MASTER_KEY || '', //Add your master key here. Keep it secret!
-  serverURL: process.env.SERVER_URL || `http://localhost:${process.env.PORT}/parse`, // Don't forget to change to https if needed
+  serverURL: process.env.SERVER_URL || `http://localhost:${port}/parse`, // Don't forget to change to https if needed
   liveQuery: {
     classNames: ['Posts', 'Comments'], // List of classes to support for query subscriptions
   },
@@ -47,7 +49,6 @@ app.get('/test', function (req, res) {
   res.sendFile(path.join(__dirname, '/public/test.html'));
 });
 
-const port = process.env.PORT || 1337;
 if (!test) {
   const httpServer = require('http').createServer(app);
   httpServer.listen(port, function () {
