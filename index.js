@@ -4,6 +4,8 @@
 const express = require('express');
 const ParseServer = require('parse-server').ParseServer;
 const path = require('path');
+const {parseServer} = require("./src/parseServer");
+const {parseDashboard} = require("./src/parseDashboard");
 const args = process.argv || [];
 const test = args.some(arg => arg.includes('jasmine'));
 
@@ -32,10 +34,9 @@ const app = express();
 app.use('/public', express.static(path.join(__dirname, '/public')));
 
 // Serve the Parse API on the /parse URL prefix
-const mountPath = process.env.PARSE_MOUNT || '/parse';
 if (!test) {
-  const api = new ParseServer(config);
-  app.use(mountPath, api);
+  app.use('/server', parseServer);
+  app.use('/dashboard', parseDashboard);
 }
 
 // Parse Server plays nicely with the rest of your web routes
