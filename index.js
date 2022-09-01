@@ -103,8 +103,14 @@ if (!test) {
           appName: config.APP_NAME,
         },
       ],
+      allowInsecureHTTP: true,
+      users: [
+        {
+          user: 'davin',
+          pass: 'pass'
+        }
+      ]
     },
-    config.ALLOW_INSECURE_HTTP
   );
 
   app.use('/server', parseServer);
