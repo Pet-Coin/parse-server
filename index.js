@@ -5,7 +5,6 @@ const express = require('express');
 const ParseServer = require('parse-server').ParseServer;
 const ParseDashboard = require('parse-dashboard');
 const path = require('path');
-const Moralis = require('moralis');
 const {cleanEnv, num, str, bool} = require("envalid");
 const dotenv = require('dotenv');
 const args = process.argv || [];
@@ -18,46 +17,9 @@ const port = process.env.PORT || 1337;
 // javascriptKey, restAPIKey, dotNetKey, clientKey
 
 const app = express();
-
 // Serve static assets from the /public folder
 app.use('/public', express.static(path.join(__dirname, '/public')));
-function validateAuthData(authData) {
-  const { message, signature, network, id, authId } = authData;
 
-  return Moralis.Auth.verify({
-    message,
-    signature,
-    network,
-  })
-    .then(result => {
-      const data = result.toJSON();
-
-      if (id === data.profileId && authId === data.id) {
-        authData.chainId = result.result.chain.decimal;
-        authData.nonce = data.nonce;
-        authData.address = result.result.address.checksum;
-        authData.version = data.version;
-        authData.domain = data.domain;
-        authData.expirationTime = data.expirationTime;
-        authData.notBefore = data.notBefore;
-        authData.resources = data.resources;
-        authData.statement = data.statement;
-        authData.uri = data.uri;
-        return;
-      }
-
-      // @ts-ignore (see note at top of file)
-      throw new Parse.Error(Parse.Error.OBJECT_NOT_FOUND, 'Moralis auth failed, invalid data');
-    })
-    .catch(() => {
-      // @ts-ignore (see note at top of file)
-      throw new Parse.Error(Parse.Error.OBJECT_NOT_FOUND, 'Moralis auth failed, invalid data');
-    });
-}
-
-function validateAppId() {
-  return Promise.resolve();
-}
 dotenv.config();
 const config = cleanEnv(process.env, {
   PORT: num(),
@@ -78,6 +40,7 @@ const SERVER_URL = `http://localhost:${port}/server`
 
 // Serve the Parse API on the /parse URL prefix
 if (!test) {
+  const MoralisAuthAdapter = require('./src/MoralisAuthAdapter.ts')
   const parseServer = new ParseServer({
     databaseURI: config.DATABASE_URI,
     cloud: config.CLOUD_PATH,
@@ -86,10 +49,7 @@ if (!test) {
     serverURL: SERVER_URL,
     auth: {
       moralis: {
-        module: {
-          validateAuthData,
-          validateAppId,
-        },
+        module: MoralisAuthAdapter
       },
     },
   });

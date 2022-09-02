@@ -12,3 +12,8 @@ Parse.Cloud.define('asyncFunction', async req => {
 Parse.Cloud.beforeSave('Test', () => {
   throw new Parse.Error(9001, 'Saving test objects is not available.');
 });
+
+Parse.Cloud.define('getServerTime', (request) => {
+  const dateToday = new Date();
+  return dateToday.valueOf()
+});
