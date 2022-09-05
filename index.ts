@@ -57,7 +57,7 @@ if (!test) {
   })
   const parseDashboard = new ParseDashboard(
     {
-      allowInsecureHTTP: true,
+      trustProxy: true,
       apps: [
         {
           appId: config.APPLICATION_ID,
