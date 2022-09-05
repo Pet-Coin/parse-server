@@ -70,7 +70,8 @@ if (!test) {
           user: 'davin',
           pass: 'pass'
         }
-      ]
+      ],
+      useEncryptedPasswords: true
     }
   )
   Moralis.start({ apiKey: process.env.MORALIS_API_KEY })
