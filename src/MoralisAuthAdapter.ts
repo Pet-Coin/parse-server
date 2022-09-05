@@ -5,8 +5,6 @@ interface VerifyEvmData {
   version: string,
   domain: string,
   expirationTime: string,
-  notBefore: string,
-  resources: string,
   statement: string,
   uri: string
 }
@@ -38,8 +36,6 @@ export async function validateAuthData (authData: any) {
         version: data.version,
         domain: data.domain,
         expirationTime: data.expirationTime,
-        notBefore: data.notBefore,
-        resources: data.resources,
         statement: data.statement,
         uri: data.uri
       }
