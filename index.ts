@@ -80,7 +80,8 @@ if (!test) {
           appId: 'pets-production',
           masterKey: config.MASTER_KEY_PRODUCTION,
           serverURL: config.SERVER_URL_PRODUCTION,
-          appName: 'Production Pets'
+          appName: 'Production Pets',
+          production: true
         }
       ],
       users: [
