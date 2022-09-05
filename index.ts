@@ -75,13 +75,8 @@ if (!test) {
   Moralis.start({ apiKey: process.env.MORALIS_API_KEY })
 
   app.use('/server', parseServer)
-  app.use('/dashboard', parseDashboard)
+  app.use('/', parseDashboard)
 }
-
-// Parse Server plays nicely with the rest of your web routes
-app.get('/', function (req: any, res: any) {
-  res.status(200).send('I dream of being a website.  Please star the parse-server repo on GitHub!')
-})
 
 const httpServer = require('http').createServer(app)
 httpServer.listen(port, function () {
