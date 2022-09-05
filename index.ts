@@ -1,12 +1,11 @@
 // Example express application adding the parse-server module to expose Parse
 // compatible API routes.
 
-// @ts-ignore
 const express = require('express')
 const ParseServer = require('parse-server').ParseServer
 const ParseDashboard = require('parse-dashboard')
 const path = require('path')
-const { cleanEnv, num, str, bool } = require('envalid')
+const { cleanEnv, num, str } = require('envalid')
 const dotenv = require('dotenv')
 const args = process.argv || []
 const test = args.some(arg => arg.includes('jasmine'))
@@ -27,26 +26,40 @@ const config = cleanEnv(process.env, {
   PORT: num(),
   MORALIS_API_KEY: str(),
 
-  DATABASE_URI: str(),
+  DATABASE_URI_STAGING: str(),
+  DATABASE_URI_PRODUCTION: str(),
 
   CLOUD_PATH: str(),
-  APP_NAME: str(),
 
-  MASTER_KEY: str(),
-  APPLICATION_ID: str(),
+  MASTER_KEY_STAGING: str(),
+  MASTER_KEY_PRODUCTION: str(),
 
-  ALLOW_INSECURE_HTTP: bool({ default: false })
+  SERVER_URL_STAGING: str(),
+  SERVER_URL_PRODUCTION: str()
 })
-const SERVER_URL = process.env.SERVER_URL || `http://localhost:${port}/server`
+
 // Serve the Parse API on the /parse URL prefix
 if (!test) {
   const MoralisAuthAdapter = require('./src/MoralisAuthAdapter')
-  const parseServer = new ParseServer({
-    databaseURI: config.DATABASE_URI,
+  const parseServerStaging = new ParseServer({
+    databaseURI: config.DATABASE_URI_STAGING,
     cloud: config.CLOUD_PATH,
-    appId: config.APPLICATION_ID,
-    masterKey: config.MASTER_KEY,
-    serverURL: SERVER_URL,
+    appId: 'pets-staging',
+    masterKey: config.MASTER_KEY_STAGING,
+    serverURL: config.SERVER_URL_STAGING,
+    auth: {
+      moralis: {
+        module: MoralisAuthAdapter
+      }
+    }
+  })
+
+  const parseServerProduction = new ParseServer({
+    databaseURI: config.DATABASE_URI_PRODUCTION,
+    cloud: config.CLOUD_PATH,
+    appId: 'pets-production',
+    masterKey: config.MASTER_KEY_PRODUCTION,
+    serverURL: config.SERVER_URL_PRODUCTION,
     auth: {
       moralis: {
         module: MoralisAuthAdapter
@@ -58,10 +71,16 @@ if (!test) {
       trustProxy: true,
       apps: [
         {
-          appId: config.APPLICATION_ID,
-          masterKey: config.MASTER_KEY,
-          serverURL: SERVER_URL,
-          appName: config.APP_NAME
+          appId: 'pets-staging',
+          masterKey: config.MASTER_KEY_STAGING,
+          serverURL: config.SERVER_URL_STAGING,
+          appName: 'Staging Pets'
+        },
+        {
+          appId: 'pets-production',
+          masterKey: config.MASTER_KEY_PRODUCTION,
+          serverURL: config.SERVER_URL_PRODUCTION,
+          appName: 'Production Pets'
         }
       ],
       users: [
@@ -72,7 +91,8 @@ if (!test) {
   )
   Moralis.start({ apiKey: process.env.MORALIS_API_KEY })
 
-  app.use('/server', parseServer)
+  app.use('/production', parseServerProduction)
+  app.use('/staging', parseServerStaging)
   app.use('/', parseDashboard)
 }
 
