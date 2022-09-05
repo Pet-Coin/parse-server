@@ -66,10 +66,7 @@ if (!test) {
       ],
       allowInsecureHTTP: true,
       users: [
-        {
-          user: 'davin',
-          pass: 'pass'
-        }
+        { user: 'frozies', pass: '$2a$10$XvrnZ7bm7Pb9A1UmphnQweVMSUyzxFZ3b7b8VPgOOqg4OnXwnPCQu' }
       ],
       useEncryptedPasswords: true
     }
