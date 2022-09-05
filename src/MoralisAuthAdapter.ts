@@ -10,9 +10,8 @@ interface VerifyEvmData {
   statement: string,
   uri: string
 }
-async function validateAuthData (authData: any) {
+export async function validateAuthData (authData: any) {
   console.log('Validate auth data')
-  console.log(process.env.MORALIS_API_KEY)
   console.log({ message: authData.message })
   console.log({ signature: authData.signature })
   const options = {
@@ -20,7 +19,7 @@ async function validateAuthData (authData: any) {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'X-API-KEY': 'uw4HKRsp2yKyiKKnJkY8fEKE9o0LcGY7nC6zYmFaV3yM9t5gOclTvsRYM8o6wV5r'
+      'X-API-KEY': process.env.MORALIS_API_KEY
     },
     body: JSON.stringify({ message: authData.message, signature: authData.signature })
   }
@@ -51,11 +50,6 @@ async function validateAuthData (authData: any) {
     .catch(err => console.error(err))
 }
 
-function validateAppId () {
+export function validateAppId () {
   return Promise.resolve()
-}
-
-module.exports = {
-  validateAuthData,
-  validateAppId
 }

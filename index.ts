@@ -1,6 +1,7 @@
 // Example express application adding the parse-server module to expose Parse
 // compatible API routes.
 
+import * as MoralisAuthAdapter from './src/MoralisAuthAdapter'
 const express = require('express')
 const ParseServer = require('parse-server').ParseServer
 const ParseDashboard = require('parse-dashboard')
@@ -40,7 +41,6 @@ const config = cleanEnv(process.env, {
 
 // Serve the Parse API on the /parse URL prefix
 if (!test) {
-  const MoralisAuthAdapter = require('./src/MoralisAuthAdapter')
   const parseServerStaging = new ParseServer({
     databaseURI: config.DATABASE_URI_STAGING,
     cloud: config.CLOUD_PATH,
