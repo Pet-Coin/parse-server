@@ -17,3 +17,4 @@ Parse.Cloud.define('getServerTime', (request) => {
   const dateToday = new Date();
   return dateToday.valueOf()
 });
+

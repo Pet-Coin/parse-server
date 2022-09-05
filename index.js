@@ -9,6 +9,8 @@ const {cleanEnv, num, str, bool} = require("envalid");
 const dotenv = require('dotenv');
 const args = process.argv || [];
 const test = args.some(arg => arg.includes('jasmine'));
+const Moralis = require('moralis').default
+
 
 const port = process.env.PORT || 1337;
 
@@ -72,6 +74,8 @@ if (!test) {
       ]
     },
   );
+  Moralis.start({apiKey: process.env.MORALIS_API_KEY})
+
 
   app.use('/server', parseServer);
   app.use('/dashboard', parseDashboard);

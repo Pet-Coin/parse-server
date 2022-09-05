@@ -1,25 +1,40 @@
-// Note: do not import Parse dependency. see https://github.com/parse-community/parse-server/issues/6467
-const Moralis = require('moralis').default
 
 async function validateAuthData(authData) {
-  const { message, signature, id, authId } = authData;
-  console.log('authData')
-  console.log(authData)
+  console.log('Validate auth data');
+  console.log(process.env.MORALIS_API_KEY);
+  console.log({ message: authData.message });
+  console.log({ signature: authData.signature });
+  const options = {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-API-KEY': 'uw4HKRsp2yKyiKKnJkY8fEKE9o0LcGY7nC6zYmFaV3yM9t5gOclTvsRYM8o6wV5r'
+    },
+    body: JSON.stringify({message: authData.message, signature: authData.signature})
+  };
+  const {default: fetch} = await import("node-fetch");
 
-  await Moralis.start({apiKey: process.env.MORALIS_API_KEY})
+  return await fetch('https://authapi.moralis.io/challenge/verify/evm', options)
+    .then(async result => {
+      console.log('results');
 
-  return await Moralis.Auth.verify({
-    message,
-    signature,
-    network: 'evm',
-  })
-    .then(result => {
-      console.log('results')
-      const data = result.toJSON();
-      if (id === data.profileId && authId === data.id) {
-        authData.chainId = result.result.chain.decimal;
+      // @ts-ignore
+        const data: {
+          chainId: string,
+          nonce: number,
+          address: string,
+          version: string,
+          domain: string,
+          expirationTime: string,
+          notBefore: string,
+          resources: string,
+          statement: string,
+          uri: string
+      } = await result.json()
+        authData.chainId = data.chainId;
         authData.nonce = data.nonce;
-        authData.address = result.result.address.checksum;
+        authData.address = data.address.toLowerCase();
         authData.version = data.version;
         authData.domain = data.domain;
         authData.expirationTime = data.expirationTime;
@@ -27,16 +42,10 @@ async function validateAuthData(authData) {
         authData.resources = data.resources;
         authData.statement = data.statement;
         authData.uri = data.uri;
-        return;
-      }
-
-      // @ts-ignore (see note at top of file)
-      throw new Parse.Error(Parse.Error.OBJECT_NOT_FOUND, 'Moralis auth failed, invalid data');
+      return authData
     })
-    .catch((e) => {
-      // @ts-ignore (see note at top of file)
-      throw new Error(e);
-    });
+    .then(response => console.log(response))
+    .catch(err => console.error(err));
 }
 
 function validateAppId() {
