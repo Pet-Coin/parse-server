@@ -37,9 +37,7 @@ const config = cleanEnv(process.env, {
 
   ALLOW_INSECURE_HTTP: bool({ default: false })
 })
-
-const SERVER_URL = `http://localhost:${port}/server`
-
+const SERVER_URL = process.env.SERVER_URL || `http://localhost:${port}/server`
 // Serve the Parse API on the /parse URL prefix
 if (!test) {
   const MoralisAuthAdapter = require('./src/MoralisAuthAdapter')
