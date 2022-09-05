@@ -57,6 +57,7 @@ if (!test) {
   })
   const parseDashboard = new ParseDashboard(
     {
+      allowInsecureHTTP: true,
       apps: [
         {
           appId: config.APPLICATION_ID,
@@ -65,7 +66,6 @@ if (!test) {
           appName: config.APP_NAME
         }
       ],
-      allowInsecureHTTP: true,
       users: [
         { user: 'frozies', pass: '$2a$10$XvrnZ7bm7Pb9A1UmphnQweVMSUyzxFZ3b7b8VPgOOqg4OnXwnPCQu' }
       ],
