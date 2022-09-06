@@ -28,6 +28,12 @@ export async function validateAuthData (authData: any) {
       console.log('results')
 
       const data = (await result.json()) as VerifyEvmData
+
+      // @ts-ignore
+      if (data.statusCode === 400) {
+        throw new Error('Failed validating Signature.')
+      }
+      console.log(data)
       authData = {
         ...authData,
         chainId: data.chainId,
