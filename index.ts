@@ -87,7 +87,8 @@ if (!test) {
         }
       ],
       users: [
-        { user: 'frozies', pass: '$2a$10$XvrnZ7bm7Pb9A1UmphnQweVMSUyzxFZ3b7b8VPgOOqg4OnXwnPCQu' }
+        { user: 'frozies', pass: '$2a$10$XvrnZ7bm7Pb9A1UmphnQweVMSUyzxFZ3b7b8VPgOOqg4OnXwnPCQu' },
+        { user: 'bigdickmcgee', pass: '$2a$10$wMPUmp7Pnn7iYqpCXPxCh.jsdHv6IH45qcK.YLYPsv.h0d2lU1CvG' }
       ],
       useEncryptedPasswords: true
     }
