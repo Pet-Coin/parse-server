@@ -47,7 +47,7 @@ if (!test) {
     appId: 'pets-staging',
     masterKey: config.MASTER_KEY_STAGING,
     serverURL: config.SERVER_URL_STAGING,
-    sessionLength: 60, // * 60 * 24 * 30, // 30days
+    sessionLength: 60 * 60 * 24, // * 60 * 24 * 30, // 30days
     auth: {
       moralis: {
         module: MoralisAuthAdapter
