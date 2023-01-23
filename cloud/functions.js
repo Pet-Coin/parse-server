@@ -22,7 +22,6 @@ Parse.Cloud.define('getServerTime', (request) => {
 Parse.Cloud.beforeSave(Parse.User, async (request) => {
     const user = request.object
     const acl = new Parse.ACL()
-    acl.setRole(true)
     acl.setRoleReadAccess('admin', true)
     acl.setRoleWriteAccess('admin', true)
     user.setACL(acl)
