@@ -87,7 +87,7 @@ if (!test) {
         }
       ],
       users: [
-        { user: 'frozies', pass: '$2a$10$XvrnZ7bm7Pb9A1UmphnQweVMSUyzxFZ3b7b8VPgOOqg4OnXwnPCQu' },
+        {"user":"davin@pets.love","pass":"$2a$10$5dV8AWgcNQFw2ZNURgv9GOeF6nqDpuCLBCCzwe/dEF83gOhI.c8T."},
       ],
       useEncryptedPasswords: true
     }
