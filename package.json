@@ -27,7 +27,8 @@
     "node-fetch": "^2.6.7",
     "parse": "3.4.2",
     "parse-dashboard": "^4.1.4",
-    "parse-server": "^5.2.1"
+    "parse-server": "^5.2.1",
+    "ts-node": "^10.9.1"
   },
   "devDependencies": {
     "@typescript-eslint/parser": "^5.36.1",
